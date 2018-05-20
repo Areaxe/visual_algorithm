@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>maopao</title>
+    <style>
+      ul{list-style: none;padding: 0;margin: 0}
+      ul li{display: inline-block;margin:0 5px; vertical-align: bottom;width:20px;background-color:lightpink}
+    </style>
+</head>
+<body>
+    <ul id="main-block"></ul>
+    <button onclick="sort()">sort</button>
+</body>
+<script>
+
+  let currentPipe;
+  let nextPipe;
+  let pipeNum = 30;
+  let inteval = 0.03;
+  let pipeNodes;
+  let timer = null;
+  let loopNum = pipeNum;
+
+  window.onload = () =>{
+    initDom(pipeNum);
+  }
+  function initDom(pipeNum){
+    let panel = document.querySelector("#main-block");
+    for(let i=0;i<pipeNum;i++){
+      let li = document.createElement("li");
+      let height = Number.parseInt((Math.random()*500));
+      li.setAttribute("style",`height:${height}px;background-color:${getRandomColor()}`);
+      panel.appendChild(li);
+    }
+  }
+
+  function getRandomColor(){
+    let colors = ['#dec64','#94d6da','#7bbfe3','#f3704b'];
+    return colors[Number.parseInt(Math.random()*colors.length)];
+  }
+
+  function sort(){
+    pipeNodes = document.querySelectorAll("#main-block li");
+    currentPipe = 0;
+    nextPipe = 1;
+    timer = setInterval(()=>{
+      if(nextPipe >= loopNum){
+        currentPipe = 0;
+        nextPipe = 1;
+        loopNum -- ;
+        if(!loopNum)
+          clearInterval(timer)
+      }else{
+        let currentPipeHeight = pipeNodes[currentPipe].offsetHeight;
+        let nextPipeHeight = pipeNodes[nextPipe].offsetHeight;
+        if(currentPipeHeight > nextPipeHeight){
+          let tempStyle = pipeNodes[currentPipe].getAttribute("style");
+          let nextStyle = pipeNodes[nextPipe].getAttribute("style");
+          pipeNodes[currentPipe].setAttribute("style",nextStyle);
+          pipeNodes[nextPipe].setAttribute("style",tempStyle);
+        }
+        currentPipe ++;
+        nextPipe ++;
+      }
+    },inteval*1000);
+  }
+</script>
+</html>
