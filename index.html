@@ -13,6 +13,10 @@
     #canvas{
       background-color: #f0f0f0;
       padding-left: 100px;
+      display: inline-block;
+    }
+    .opera{
+      display: inline-block;
     }
     button {
       width: 120px;
@@ -23,12 +27,18 @@
 </head>
 
 <body>
-  <label for="range">控制排序速度：</label>
-  <input type="range" id="range" onchange="changeInterval()" /><hr />
+  
   <canvas id="canvas" width="1100" height="800"></canvas>
-  <button onclick="baginSort('bubbing')">冒泡排序</button>
-  <button onclick="baginSort('insert')">插入排序</button>
-  <button onclick="resetData()">重新生成数组</button>
+  <div class="opera">
+    <div>
+      <label for="range">控制排序速度：</label>
+      <input type="range" id="range" onchange="changeInterval()" /><hr />
+    </div>
+    <button onclick="baginSort('bubbing')">冒泡排序</button>
+    <button onclick="baginSort('insert')">插入排序</button>
+    <button onclick="resetData()">重新生成数组</button>
+  </div>
+  
   <script src="./js/pipe.js"></script>
   <script src="./js/sort.js"> </script>
 <script>

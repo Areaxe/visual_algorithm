@@ -27,10 +27,12 @@ Sort.prototype.initData = function (pipeNum) {
 }
 
 Sort.prototype.changeInterval = function (interval) {
-  clearInterval(this.timer);
-  this.isSorting = false;
-  this.interval = interval;
-  this.run(this.type);
+  if(this.isSorting){
+    clearInterval(this.timer);
+    this.isSorting = false;
+    this.interval = interval;
+    this.run(this.type);
+  }
 }
 
 Sort.prototype.resetPipe = function () {
@@ -96,8 +98,9 @@ Sort.prototype.insert = function () {
         pointPipe.movein();
         this.currentIndex++;
         this.pointIndex = currentIndex; //
-        if (this.currentIndex >= pipeList.length) {
-          this.stopSort();
+        if (this.currentIndex > pipeList.length) {
+          this.isSorting = false;
+          clearInterval(this.timer);
         }
       }
       this.render();
@@ -115,6 +118,7 @@ Sort.prototype.bubbing = function () {
     this.timer = setInterval(() => {
       let {pointIndex, pipeList, currentIndex} = this;
       if (this.currentIndex >= pipeList.length - 1) {
+        this.isSorting = false;
         clearInterval(this.timer);
         return;
       }
