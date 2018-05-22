@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style lang="">
+    #canvas{
+      background-color: #f0f0f0;
+      padding-left: 100px;
+    }
+  </style>
+</head>
+<body>
+  <input type="range" id="range" onchange="changeInterval()" /><hr />
+  <canvas id="canvas" width="1100" height="800"></canvas>
+  <button onclick="sort()">排序</button>
+  <button onclick="pause()">暂停</button>
+  <script src="./pipe.js"></script>
+  <script>
+  window.onload = ()=>{
+    initPipe();
+  }
+
+  let pipeList = [];
+  let timer = null;
+  let canvas = document.querySelector("#canvas");
+  let ctx = canvas.getContext("2d");
+  let currentIndex = 1;  // 当前焦点
+  let pointIndex = currentIndex;
+  let interval = 150;
+  let isSorting = false;
+
+  function initPipe(){
+    let pipeNum = 30;
+    let colors = ['lightblue','pink','yellow'];
+    for(let i=0;i<pipeNum;i++){
+      let height = parseInt(Math.random()*250 + 50);
+      let y = 500 - height;
+      let color = colors[parseInt(Math.random()*(colors.length))];
+      let pipe = new Pipe(ctx,{ height, x: i*35, color, y });
+      pipeList.push(pipe);
+    }
+    renderList();
+  }
+
+  function sort(){
+    if(!isSorting){
+      isSorting = true;
+      timer = setInterval(()=>{
+        let pointPipe = pipeList[pointIndex];  // 当前指针指向的柱子
+        let pointPrevPipe = pipeList[pointIndex-1];  // 当前指针指向的柱子的前一根
+        
+        if(pointIndex >=1 && pointPipe.height < pointPrevPipe.height){
+          pointPipe.moveout();  
+            let temp = pipeList[pointIndex];
+            pipeList[pointIndex] = pipeList[pointIndex-1];
+            pipeList[pointIndex - 1] = temp; 
+            pointIndex -- ; 
+          }else{   
+            pointPipe.movein();
+            currentIndex ++;
+            pointIndex = currentIndex;  //
+            if(currentIndex >= pipeList.length){
+              stopSort();
+            }
+          }
+        renderList();
+      },interval);
+    }
+  }
+
+  function stopSort(){
+    pointIndex = currentIndex = 1;
+    clearInterval(timer);
+  }
+
+  function changeInterval(){
+    let range = document.querySelector("#range").value;
+    interval = Number.parseInt(range)*5;
+    pause();
+    sort();
+  }
+
+  function renderList(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pipeList.forEach((item,index)=>{
+      item.x = index *35;
+      if(index === pointIndex){
+        item.focus();
+      }
+      else{
+        item.unfocus();
+      }
+     item.render();
+    });
+  }
+
+  function pause(){
+    clearInterval(timer);
+  }
+    
+  </script>
+</body>
+</html>
