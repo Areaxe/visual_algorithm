@@ -14,7 +14,6 @@
   <input type="range" id="range" onchange="changeInterval()" /><hr />
   <canvas id="canvas" width="1100" height="800"></canvas>
   <button onclick="sort()">排序</button>
-  <button onclick="pause()">暂停</button>
   <script src="./pipe.js"></script>
   <script>
   window.onload = ()=>{
@@ -72,6 +71,7 @@
   function stopSort(){
     pointIndex = currentIndex = 1;
     clearInterval(timer);
+    isSorting = false;
   }
 
   function changeInterval(){
@@ -96,6 +96,7 @@
   }
 
   function pause(){
+    isSorting = false;
     clearInterval(timer);
   }
     
