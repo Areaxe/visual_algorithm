@@ -60,11 +60,11 @@ Sort.prototype.run = function (type) {
       this.sort = this.bubbing;
       break;
     case 'insert':
-      initIndex(1,1);
+      this.initIndex(1,1);
       this.sort = this.insert;
       break;
     default:
-      initIndex(1,1);
+      this.initIndex(1,1);
       this.sort = this.insert;
   }
   this.sort();
